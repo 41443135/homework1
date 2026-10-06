@@ -9,7 +9,7 @@
 ### 1. 解題說明
 
 #### 問題描述
-本題要求實現阿克曼函數（Ackermann's Function）$A(m, n)$的計算。阿克曼函數是一個非原始遞迴函數（non-primitive recursive function），
+本題要求實現阿克曼函數（Ackermann's Function）A(m, n)的計算。阿克曼函數是一個非原始遞迴函數（non-primitive recursive function），
 其增長速度極快。本題需分別以「遞迴」與「非遞迴」兩種方式實作：
 - **遞迴版本**：直接依據數學定義進行條件判斷與自我呼叫。
 - **非遞迴版本**：自行利用動態陣列模擬 Stack（堆疊），並實現動態擴充記憶體機制以處理遞迴呼叫的狀態。
