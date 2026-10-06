@@ -2,16 +2,16 @@
 
 作業一
 
+---
+
 ## Problem 1: 阿克曼函數 (Ackermann's Function)
 
-### 解題說明
+### 1. 解題說明
 本題要求實現阿克曼函數（Ackermann's Function）$A(m, n)$ 的計算。阿克曼函數是一個非原始遞迴函數（non-primitive recursive function），其增長速度極快。本題需分別以「遞迴」與「非遞迴」兩種方式實作：
-遞迴版本：直接依據數學定義進行條件判斷與自我呼叫。
-非遞迴版本：自行利用動態陣列模擬 Stack（堆疊），並實現動態擴充記憶體機制以處理遞迴呼叫的狀態。
+- **遞迴版本**：直接依據數學定義進行條件判斷與自我呼叫。
+- **非遞迴版本**：自行利用動態陣列模擬 Stack（堆疊），並實現動態擴充記憶體機制以處理遞迴呼叫的狀態。
 
-### 程式實作
-
-以下為主要程式碼：
+### 2. 程式實作
 
 ```cpp
 #include<iostream>
@@ -86,51 +86,12 @@ int main() {
 	return 0;
 }
 
-作業二
+### 3. 效能分析
 
-## Problem 2: 冪集 (Powerset)
+- **時間複雜度：阿克曼函數的成長速度極快，其時間複雜度為 $O(A(m, n))$。當 $m \ge 4$ 時，計算量會爆炸性成長。
+- **空間複雜度：遞迴呼叫堆疊的最大深度為 $m$，加上記錄選擇狀態的 chosen 陣列，空間複雜度為 $O(m)$。
 
-### 解題說明
-實現遞迴函式計算並輸出集合 $S$ 的所有可能子集（Powerset）。
+### 4. 測試與驗證
 
-### 程式實作
-
-以下為主要程式碼：
-
-```cpp
-#include <iostream>
-using namespace std;
-const int MAX_SIZE = 100;
-int m;
-void powerset(int index, bool chosen[], char p[]) {
-    //當處理完最後一個元素時
-    if (index == m) {
-        cout << "(";
-        for (int i = 0; i < m; i++) {
-            if (chosen[i]) {
-                cout << p[i];
-            }
-        }
-        cout << ") ";
-        return;
-    }
-    chosen[index] = false;
-    powerset(index + 1, chosen, p);
-
-    chosen[index] = true;
-    powerset(index + 1, chosen, p);
-}
-int main() {
-    char p[MAX_SIZE];
-    bool chosen[MAX_SIZE];
-    cout << "請輸入元素數量 m: ";
-    cin >> m;
-    cout << "請輸入 " << m << " 個字元: ";
-    for (int i = 0; i < m; i++) {
-        cin >> p[i];
-    }
-    cout << "powerset(S) = { ";
-    powerset(0, chosen, p);
-    cout << "}\n";
-    return 0;
-}
+- **測試案例 1：輸入 m = 3，字元為 a b c
+	- **輸出結果：powerset(S) = { () (c) (b) (bc) (a) (ac) (ab) (abc) }
