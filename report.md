@@ -91,7 +91,9 @@ int main() {
 ### 3. 效能分析
 
 - **時間複雜度**：阿克曼函數的成長速度極快，其時間複雜度為 $O(A(m, n))$。當 $m \ge 4$ 時，計算量會爆炸性成長。
-- **空間複雜度**：遞迴呼叫堆疊的最大深度為 $m$，加上記錄選擇狀態的 chosen 陣列，空間複雜度為 $O(m)$。
+- **空間複雜度**：
+	- **遞迴版本**:使用 Call Stack，空間複雜度取決於最大遞迴深度，為 $O(A(m, n))$。
+    - **非遞迴版本**:使用自訂 Stack 陣列，空間複雜度同樣為 $O(\text{Stack 最大深度})$，最壞情況下與遞迴深度相當。
 
 ### 4. 測試與驗證
 
@@ -111,3 +113,72 @@ int main() {
 因此手動 Stack 中必須一次放入兩層狀態。為避免 Stack 溢位，程式中加上了動態擴充記憶體（重新配置二倍大容量）的機制，確保遇到較深層的呼叫
 時不會造成記憶體區段錯誤（Segmentation Fault）。
 
+作業二
+
+---
+
+## Problem 2: 冪集 (Powerset)
+
+### 1. 解題說明
+本題要求撰寫一個遞迴函式，計算並輸出一個包含 $m$ 個元素的集合 $S$ 之所有可能子集（冪集 Powerset）。對於集合中的每一個元素，都有「選」與
+「不選」兩種可能，透過深度優先搜尋（DFS）遍歷所有組合。
+
+### 2. 程式實作
+
+```cpp
+#include <iostream>
+using namespace std;
+const int MAX_SIZE = 100;
+int m;
+void powerset(int index, bool chosen[], char p[]) {
+    //當處理完最後一個元素時
+    if (index == m) {
+        cout << "(";
+        for (int i = 0; i < m; i++) {
+            if (chosen[i]) {
+                cout << p[i];
+            }
+        }
+        cout << ") ";
+        return;
+    }
+    chosen[index] = false;
+    powerset(index + 1, chosen, p);
+
+    chosen[index] = true;
+    powerset(index + 1, chosen, p);
+}
+int main() {
+    char p[MAX_SIZE];
+    bool chosen[MAX_SIZE];
+    cout << "請輸入元素數量 m: ";
+    cin >> m;
+    cout << "請輸入 " << m << " 個字元: ";
+    for (int i = 0; i < m; i++) {
+        cin >> p[i];
+    }
+    cout << "powerset(S) = { ";
+    powerset(0, chosen, p);
+    cout << "}\n";
+    return 0;
+}
+```
+
+### 3. 效能分析
+
+- **時間複雜度**：對於 $m$ 個元素，每個元素都有 2 種選擇（選或不選），生成的所有子集數量為 $2^m$。Base Case 輸出每個子集需花費
+$O(m)$，故總時間複雜度為 $O(m \cdot 2^m)$。
+- **空間複雜度**：遞迴呼叫堆疊的最大深度為 $m$，加上記錄選擇狀態的 chosen 陣列，空間複雜度為 $O(m)$。
+
+### 4. 測試與驗證
+
+- **測試案例 1**:輸入 m = 3，字元為 a b c
+	- 輸出結果：powerset(S) = { () (c) (b) (bc) (a) (ac) (ab) (abc) }
+- **測試案例 2**:輸入 m = 2，字元為 1 2
+	- 輸出結果：powerset(S) = { () (2) (1) (12) }
+
+### 5. 申論及開發報告
+
+本題採用了標準的回溯（Backtracking）觀念，透過布林陣列 chosen[] 來維護狀態。先遞迴呼叫 chosen[index] = false 表示不選擇當前元素，再
+呼叫 chosen[index] = true 表示選擇當前元素。這種二分樹狀的遞迴呼叫能夠完整且不重複地列舉出 $2^m$ 個子集。利用固定陣列與全域變數 $m$，
+程式碼精簡且能清楚展示遞迴結構。
