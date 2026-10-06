@@ -94,5 +94,15 @@ int main() {
 
 ### 4. 測試與驗證
 
-- **測試案例 1**：輸入 m = 3，字元為 a b c
-	- **輸出結果**：powerset(S) = { () (c) (b) (bc) (a) (ac) (ab) (abc) }
+- **測試案例 1**：輸入 m = 1, n = 2
+	- **遞迴輸出**：遞迴的ackermann's function結果:A(1,2) =4
+	- **非遞迴輸出**：非遞迴的ackermann's function結果:A(1,2) = 4
+- **測試案例 2**：輸入 m = 2, n = 2
+	- - **遞迴輸出**：遞迴的ackermann's function結果:A(2,2) =7
+	- **非遞迴輸出**：非遞迴的ackermann's function結果:A(2,2) = 7
+- **測試案例 3**：輸入 m = 3, n = 2
+	- - **遞迴輸出**：遞迴的ackermann's function結果:A(3,2) =29
+	- **非遞迴輸出**：非遞迴的ackermann's function結果:A(3,2) = 29
+
+### 5. 申論及開發報告
+
