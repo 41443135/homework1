@@ -1,148 +1,85 @@
-# 41143263
+# 41143135
 
 作業一
 
----
-
-## Problem 1: Ackermann's Function
+## Problem 1: 阿克曼函數 (Ackermann's Function)
 
 ### 解題說明
-
-本題要求實作阿克曼函數（Ackermann's function）$A(m, n)$，分別使用**遞迴（Recursive）**與**非遞迴（Non-recursive）**兩種方式來計算結果。
-
-### 解題策略
-
-1. **遞迴版本**：
-   根據數學定義設定三個分支條件：
-   - 當 $m = 0$ 時，返回 $n + 1$。
-   - 當 $n = 0$ 時，遞迴呼叫 $A(m - 1, 1)$。
-   - 其他情況，遞迴呼叫 $A(m - 1, A(m, n - 1))$。
-
-2. **非遞迴版本**：
-   利用 `std::stack` 資料結構模擬系統呼叫堆疊（Call Stack），將 $m$ 依序壓入堆疊中，藉由迴圈逐步解開遞迴結構。
+實現遞迴與非遞迴（自訂 Stack 與動態擴充記憶體）兩種方式來計算阿克曼函數。
 
 ### 程式實作
 
-```cpp
-#include <iostream>
-#include <stack>
-
-using namespace std;
-
-// 遞迴版本
-int ackermannRecursive(int m, int n) {
-    if (m == 0) {
-        return n + 1;
-    } else if (n == 0) {
-        return ackermannRecursive(m - 1, 1);
-    } else {
-        return ackermannRecursive(m - 1, ackermannRecursive(m, n - 1));
-    }
-}
-
-// 非遞迴版本（使用 Stack）
-int ackermannNonRecursive(int m, int n) {
-    stack<int> st;
-    st.push(m);
-
-    while (!st.empty()) {
-        m = st.top();
-        st.pop();
-
-        if (m == 0) {
-            n = n + 1;
-        } else if (n == 0) {
-            st.push(m - 1);
-            n = 1;
-        } else {
-            st.push(m - 1);
-            st.push(m);
-            n = n - 1;
-        }
-    }
-    return n;
-}
-
-int main() {
-    int m = 2, n = 1;
-    cout << "Ackermann Recursive (" << m << ", " << n << "): " << ackermannRecursive(m, n) << '\n';
-    cout << "Ackermann Non-Recursive (" << m << ", " << n << "): " << ackermannNonRecursive(m, n) << '\n';
-    return 0;
-}
-```
-
----
-
-## Problem 2: Powerset
-
-### 解題說明
-
-本題要求編寫一個遞迴函數來計算並輸出集合 $S$ 的**冪集（powerset）**，即包含 $S$ 所有可能子集的集合。
-
-### 解題策略
-
-1. **遞迴分解**：
-   對於集合中的每一個元素，都有兩種選擇：**「不選」** 或 **「選」**。
-2. **狀態紀錄**：
-   使用布林陣列 `chosen[]` 紀錄每個元素的選擇狀態。
-3. **結束條件（Base Case）**：
-   當處理索引 `index == m` 時，代表已決定好所有元素，走訪 `chosen[]` 陣列印出目前的子集組合。
-
-### 程式實作
+以下為主要程式碼：
 
 ```cpp
-#include <iostream>
-
+#include<iostream>
 using namespace std;
-
-const int MAX_SIZE = 100;
-int m;
-
-// 遞迴求解 Powerset
-void powerset(int index, bool chosen[], char p[]) {
-    // Base Case：處理完所有元素後輸出子集
-    if (index == m) {
-        cout << "(";
-        bool first = true;
-        for (int i = 0; i < m; i++) {
-            if (chosen[i]) {
-                if (!first) {
-                    cout << ",";
-                }
-                cout << p[i];
-                first = false;
-            }
-        }
-        cout << ") ";
-        return;
-    }
-
-    // 選擇 1：不包含當前元素
-    chosen[index] = false;
-    powerset(index + 1, chosen, p);
-
-    // 選擇 2：包含當前元素
-    chosen[index] = true;
-    powerset(index + 1, chosen, p);
-}
-
+//recursive
+int Ackerman(int m,int n){
+	if (m == 0) {
+		return n + 1;
+	}
+	else if(n==0){
+		return Ackerman(m - 1, 1);
+	}
+	else {
+		return Ackerman(m - 1, Ackerman(m, n - 1));
+	}
+};
+//nonrecursive
+int ackerman(int m,int n) {
+	int capacity = 100;//預設容量大小
+	int* stack = new int[capacity];
+	int top = -1;//top=-1表示Stack目前是空的
+	top++;
+	stack[top] = m;//放入m
+	while (top >= 0) {
+		m = stack[top];//m=最上面的值
+		top--;
+		if (m == 0) {
+			n += 1;
+		}
+		else if (n == 0) {
+			if (top + 1 >= capacity) {//再放入之前確認是否還有空間 不夠就補
+				int newcapacity = capacity * 2;
+				int* newstack = new int[newcapacity];
+				for (int i = 0; i <= top; i++) {
+					newstack[i] = stack[i];
+				}
+				delete[] stack;// 釋放舊記憶體
+				stack = newstack;
+				capacity = newcapacity;
+			}
+			top++;
+			stack[top] = m - 1;
+			n = 1;
+		}
+		else {
+			if (top + 2 >= capacity) {//再放入之前確認是否還有空間 不夠就補
+				int newCapacity = capacity * 2;
+				int* newStack = new int[newCapacity];
+				for (int i = 0; i <= top; i++) {
+					newStack[i] = stack[i];
+				}
+				delete[] stack; // 釋放舊記憶體
+				stack = newStack;
+				capacity = newCapacity;
+			}
+			top++;
+			stack[top] = m - 1;
+			top++;//這裡會做兩層 一層是A(m-1,A(m,n-1))的 一層是A(m,n-1)的
+			stack[top] = m;
+			n -= 1;
+		}
+	}
+	delete[] stack;
+	return n;
+};
 int main() {
-    char p[MAX_SIZE];
-    bool chosen[MAX_SIZE];
-
-    cout << "請輸入元素數量 m: ";
-    cin >> m;
-
-    cout << "請輸入 " << m << " 個字元: ";
-    for (int i = 0; i < m; i++) {
-        cin >> p[i];
-    }
-
-    cout << "powerset(S) = { ";
-    powerset(0, chosen, p);
-    cout << "}\n";
-
-    return 0;
+	int m, n;
+	cout << "請輸入m跟n的值:";
+	cin >> m >> n;
+	cout<<"遞迴的ackermann's function結果:A("<<m<<','<<n<<") =" << Ackerman(m, n) << endl;
+	cout<<"非遞迴的ackermann's function結果:A(" << m << ',' << n << ") = " << ackerman(m, n);
+	return 0;
 }
-```
-
