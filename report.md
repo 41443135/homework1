@@ -83,3 +83,52 @@ int main() {
 	cout<<"非遞迴的ackermann's function結果:A(" << m << ',' << n << ") = " << ackerman(m, n);
 	return 0;
 }
+
+作業二
+
+## Problem 2: 冪集 (Powerset)
+
+### 解題說明
+實現遞迴函式計算並輸出集合 $S$ 的所有可能子集（Powerset）。
+
+### 程式實作
+
+以下為主要程式碼：
+
+```cpp
+#include <iostream>
+using namespace std;
+const int MAX_SIZE = 100;
+int m;
+void powerset(int index, bool chosen[], char p[]) {
+    //當處理完最後一個元素時
+    if (index == m) {
+        cout << "(";
+        for (int i = 0; i < m; i++) {
+            if (chosen[i]) {
+                cout << p[i];
+            }
+        }
+        cout << ") ";
+        return;
+    }
+    chosen[index] = false;
+    powerset(index + 1, chosen, p);
+
+    chosen[index] = true;
+    powerset(index + 1, chosen, p);
+}
+int main() {
+    char p[MAX_SIZE];
+    bool chosen[MAX_SIZE];
+    cout << "請輸入元素數量 m: ";
+    cin >> m;
+    cout << "請輸入 " << m << " 個字元: ";
+    for (int i = 0; i < m; i++) {
+        cin >> p[i];
+    }
+    cout << "powerset(S) = { ";
+    powerset(0, chosen, p);
+    cout << "}\n";
+    return 0;
+}
