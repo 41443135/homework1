@@ -7,7 +7,8 @@
 ## Problem 1: 阿克曼函數 (Ackermann's Function)
 
 ### 1. 解題說明
-本題要求實現阿克曼函數（Ackermann's Function）$A(m, n)$ 的計算。阿克曼函數是一個非原始遞迴函數（non-primitive recursive function），其增長速度極快。本題需分別以「遞迴」與「非遞迴」兩種方式實作：
+本題要求實現阿克曼函數（Ackermann's Function）$A(m, n)$ 的計算。阿克曼函數是一個非原始遞迴函數（non-primitive recursive function），
+其增長速度極快。本題需分別以「遞迴」與「非遞迴」兩種方式實作：
 - **遞迴版本**：直接依據數學定義進行條件判斷與自我呼叫。
 - **非遞迴版本**：自行利用動態陣列模擬 Stack（堆疊），並實現動態擴充記憶體機制以處理遞迴呼叫的狀態。
 
@@ -98,11 +99,15 @@ int main() {
 	- **遞迴輸出**：遞迴的ackermann's function結果:A(1,2) =4
 	- **非遞迴輸出**：非遞迴的ackermann's function結果:A(1,2) = 4
 - **測試案例 2**：輸入 m = 2, n = 2
-	- - **遞迴輸出**：遞迴的ackermann's function結果:A(2,2) =7
+	- **遞迴輸出**：遞迴的ackermann's function結果:A(2,2) =7
 	- **非遞迴輸出**：非遞迴的ackermann's function結果:A(2,2) = 7
 - **測試案例 3**：輸入 m = 3, n = 2
-	- - **遞迴輸出**：遞迴的ackermann's function結果:A(3,2) =29
+	- **遞迴輸出**：遞迴的ackermann's function結果:A(3,2) =29
 	- **非遞迴輸出**：非遞迴的ackermann's function結果:A(3,2) = 29
 
 ### 5. 申論及開發報告
+
+在實作非遞迴版本時，最大的挑戰在於如何模擬系統的 Call Stack。阿克曼函數在 $m > 0, n > 0$ 時會產生雙層遞迴呼叫 $A(m-1, A(m, n-1))$，
+因此手動 Stack 中必須一次放入兩層狀態。為避免 Stack 溢位，程式中加上了動態擴充記憶體（重新配置二倍大容量）的機制，確保遇到較深層的呼叫
+時不會造成記憶體區段錯誤（Segmentation Fault）。
 
